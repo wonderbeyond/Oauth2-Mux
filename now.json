@@ -1,0 +1,24 @@
+{
+  "name": "oauth2-mux",
+  "version": 2,
+  "env": {
+    "APP_ID": "@app_id",
+    "LOG_LEVEL": "@log_level",
+    "TRUSTED_ORIGINS": "@trusted_origins",
+    "SERVICE_PUBLIC_ORIGIN": "@service_public_origin",
+    "OAUTH2_PROVIDERS": "@oauth2_providers"
+  },
+  "builds": [
+    { "src": "api/*.js", "use": "@now/node" }
+  ],
+  "routes": [
+    {
+      "src": "/(?<provider>[^/]+)/authorize",
+      "dest": "/api/oauth2-mux-authorize.js?provider=$provider"
+    },
+    {
+      "src": "/(?<provider>[^/]+)/callback",
+      "dest": "/api/oauth2-mux-callback.js?provider=$provider"
+    }
+  ]
+}

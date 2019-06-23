@@ -1,0 +1,42 @@
+{
+  "name": "oauth2-mux",
+  "version": "1.0.0",
+  "description": "Self-hosted Oauth2 multiplexer with a single unified redirect_uri which then routed to your own app's URIs",
+  "main": "index.js",
+  "engines" : {
+    "node" : ">10.0.0"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
+    "dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
+    "dev:debug": "nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty",
+    "test": "mocha --require @babel/register --exit",
+    "test:debug": "mocha --require @babel/register --inspect-brk --exit",
+    "lint": "eslint -c .eslintrc.json {server,test}/**",
+    "lint:fix": "eslint --fix -c .eslintrc.json {server,test}/**"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.0",
+    "client-oauth2": "^4.2.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.0",
+    "pino-pretty": "^3.0.1",
+    "prettier": "^1.17.1",
+    "supertest": "^4.0.2"
+  },
+  "author": "Wonder <wonderbeyond@gmail.com> (https://github.com/wonderbeyond)"
+}
