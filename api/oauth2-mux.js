@@ -14,11 +14,12 @@ for (let [p, s] of Object.entries(oauth2Providers.providers)) {
     accessTokenUri: s.accessTokenUri,
     scopes: s.scopes,
     // eslint-disable-next-line prettier/prettier
-    redirectUri: `${process.env.SERVICE_PUBLIC_ORIGIN || ''}/${p}/callback`,
+    redirectUri: null,
   });
 }
 
 export function authorize(req, res) {
+  const provider = req.query.provider;
   const client = clients[req.query.provider];
 
   if (!req.query.redirect_uri) {
@@ -38,11 +39,13 @@ export function authorize(req, res) {
 
   // rUrl: redirect_uri passed to oauth2 provider
   // mux_redirect_uri: redirect uri for end clients
-  let rUrl = new URL(client.options.redirectUri);
+
+  let currentProto = req.headers['x-forwarded-proto'] || 'https';
+  let currentHost = req.headers['host'];
+  let rUrl = new URL(`${currentProto}://${currentHost}/${provider}/callback`);
   rUrl.searchParams.set('mux_redirect_uri', req.query.redirect_uri);
   client.options.redirectUri = rUrl.href;
-  const state = `${req.query.provider}-${+new Date()}`;
-  // return res.redirect(client.code.getUri({ state }));
+  const state = `${provider}-${+new Date()}`;
   res.status(302);
   res.setHeader('Location', client.code.getUri({ state }));
   res.end();
